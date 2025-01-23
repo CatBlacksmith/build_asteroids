@@ -1,4 +1,6 @@
+import sys
 import pygame
+
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -14,9 +16,10 @@ def main():
     asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = (updatable)
+    AsteroidField.containers = updatable
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
@@ -31,6 +34,11 @@ def main():
 
         for obj in updatable:
             obj.update(dt)
+        
+        for obj in asteroids:
+            if obj.collide(player):
+                print("Game over!")
+                sys.exit()
 
         screen.fill("black")
 
